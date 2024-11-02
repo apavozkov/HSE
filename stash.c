@@ -73,16 +73,3 @@ int main(int argc, char **argv) {
 
     return 0;
 }
-
-
-int key = START_XOR_KEY;
-
-    for (int i = 0; i < MAGIC_NUMBER_SIZE; i++) {
-        int key += 0x0A
-        magic[i] ^= key;
-    }
-
-
-
-
-
