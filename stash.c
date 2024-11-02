@@ -19,11 +19,11 @@ void distort(const char *filename) {
     fseek(file, OFFSET, SEEK_SET); // Читаем текущее magicnum с 0 позиции на указанное число байт
     fread(magic, 1, MAGIC_NUMBER_SIZE, file); // Записываем в массив
     
-    int key = START_XOR_KEY;
+    int dkey = START_XOR_KEY;
 
     for (int i = 0; i < MAGIC_NUMBER_SIZE; i++) {
-        int key += 0x0A
-        magic[i] ^= key;
+        int dkey = 0x0A + dkey;
+        magic[i] ^= dkey;
     }
     
     fseek(file, OFFSET, SEEK_SET);
@@ -45,8 +45,11 @@ void restore(const char *filename) {
     fseek(file, OFFSET, SEEK_SET);
     fread(magic, 1, MAGIC_NUMBER_SIZE, file);
     
+    int rkey = START_XOR_KEY;
+
     for (int i = 0; i < MAGIC_NUMBER_SIZE; i++) {
-        magic[i] ^= XOR_KEY;
+        int rkey = 0x0A + rkey;
+        magic[i] ^= rkey;
     }
     
     fseek(file, OFFSET, SEEK_SET);
