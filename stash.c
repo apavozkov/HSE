@@ -3,12 +3,12 @@
 #include <string.h>
 #include <unistd.h>
 
-#define MAGIC_NUMBER_SIZE 4  // Размер магического числа
+#define MAGIC_NUMBER_SIZE 8  // Размер магического числа
 #define OFFSET 0              // Смещение магического числа в файле
-#define XOR_KEY 0xFF         // Ключ для XOR
+#define START_XOR_KEY 0xFF         // Стартовый ключ для XOR
 
 void distort(const char *filename) {
-    FILE *file = fopen(filename, "rb+");
+    FILE *file = fopen(filename, "rb+"); // Открываем файлв режиме чтение+запись и проверяем успешность
     if (!file) {
         printf("Не удалось открыть файл");
         exit;
@@ -16,11 +16,14 @@ void distort(const char *filename) {
     
     unsigned char magic[MAGIC_NUMBER_SIZE];
     
-    fseek(file, OFFSET, SEEK_SET);
-    fread(magic, 1, MAGIC_NUMBER_SIZE, file);
+    fseek(file, OFFSET, SEEK_SET); // Читаем текущее magicnum с 0 позиции на указанное число байт
+    fread(magic, 1, MAGIC_NUMBER_SIZE, file); // Записываем в массив
     
+    int key = START_XOR_KEY;
+
     for (int i = 0; i < MAGIC_NUMBER_SIZE; i++) {
-        magic[i] ^= XOR_KEY;
+        int key += 0x0A
+        magic[i] ^= key;
     }
     
     fseek(file, OFFSET, SEEK_SET);
@@ -70,3 +73,16 @@ int main(int argc, char **argv) {
 
     return 0;
 }
+
+
+int key = START_XOR_KEY;
+
+    for (int i = 0; i < MAGIC_NUMBER_SIZE; i++) {
+        int key += 0x0A
+        magic[i] ^= key;
+    }
+
+
+
+
+
