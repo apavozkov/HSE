@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
         int status;
         waitpid(pid, &status, 0);  // Ожидаем завершения дочернего процесса и смотрим результат
         if (WIFEXITED(status)) {
-            printf("Процесс завершился с кодом %d\n", WEXITSTATUS(status));
+            printf("Процесс завершился с кодом: %d\n", WEXITSTATUS(status));
         } else {
             printf("Процесс завершился плохо\n");
         }
