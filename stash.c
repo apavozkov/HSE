@@ -2,30 +2,28 @@
 #include <stdlib.h>
 #include <string.h>
 
-void distort_file(const char *filename) {
+void distort(const char *filename) {
     FILE *file = fopen(filename, "rb");
     if (!file) {
         printf("Не удалось открыть файл для искажения");
-        return;
+        exit;
     }
 
     FILE *temp_file = fopen("temp.dat", "wb");
     if (!temp_file) {
-        perror("Ошибка создания временного файла");
-        fclose(file);
+        printf("Не удалось создать временный файл");
+        close(file);
         return;
     }
 
     int ch;
     while ((ch = fgetc(file)) != EOF) {
-        // Применение простого XOR шифрования
         fputc(ch ^ 0xFF, temp_file);
     }
 
     fclose(file);
     fclose(temp_file);
 
-    // Заменяем оригинальный файл временным
     remove(filename);
     rename("temp.dat", filename);
 
@@ -35,27 +33,25 @@ void distort_file(const char *filename) {
 void recover_file(const char *filename) {
     FILE *file = fopen(filename, "rb");
     if (!file) {
-        perror("Ошибка открытия файла для восстановления");
-        return;
+        printf("Не удалось открыть файл для восстановления");
+        exit;
     }
 
     FILE *temp_file = fopen("temp.dat", "wb");
     if (!temp_file) {
-        perror("Ошибка создания временного файла");
-        fclose(file);
-        return;
+        printf("Не удалось создать временный файл");
+        close(file);
+        exit;
     }
 
     int ch;
     while ((ch = fgetc(file)) != EOF) {
-        // Восстановление простым XOR шифрованием
         fputc(ch ^ 0xFF, temp_file);
     }
 
-    fclose(file);
-    fclose(temp_file);
+    close(file);
+    close(temp_file);
 
-    // Заменяем оригинальный файл временным
     remove(filename);
     rename("temp.dat", filename);
 
@@ -64,19 +60,18 @@ void recover_file(const char *filename) {
 
 int main(int argc, char *argv[]) {
     if (argc != 3) {
-        fprintf(stderr, "Использование: %s <режим> <имя файла>\n", argv[0]);
-        fprintf(stderr, "<режим> может быть 'distort' для искажения или 'recover' для восстановления.\n");
-        return EXIT_FAILURE;
+        printf("Использование: %s <режим> <имя файла>\n");
+        exit;
     }
 
     if (strcmp(argv[1], "distort") == 0) {
-        distort_file(argv[2]);
+        distort(argv[2]);
     } else if (strcmp(argv[1], "recover") == 0) {
-        recover_file(argv[2]);
+        recover(argv[2]);
     } else {
-        fprintf(stderr, "Неизвестный режим: %s\n", argv[1]);
-        return EXIT_FAILURE;
+        printf(stderr, "Неизвестный режим: %s\n", argv[1]);
+        exit;
     }
 
-    return EXIT_SUCCESS;
+    return 0;
 }
