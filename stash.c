@@ -20,11 +20,11 @@ void alteration (const char *filename) {
     fseek(file, OFFSET, SEEK_SET); // Читаем текущее magicnum с 0 позиции на указанное число байт
     fread(magic, 1, MAGIC_NUMBER_SIZE, file); 
     
-    int dkey = START_XOR_KEY; // Ставим в переменную ключа стартовое значение
+    int key = START_XOR_KEY; // Ставим в переменную ключа стартовое значение
 
     for (int i = 0; i < MAGIC_NUMBER_SIZE; i++) { // Перебираем в цикле все байты
-        int dkey = STEP_KEY + dkey; // Создаётся новый ключ для байта
-        magic[i] ^= dkey; // Искажаем значение через XOR
+        int key = STEP_KEY + key; // Создаётся новый ключ для байта
+        magic[i] ^= key; // Искажаем значение через XOR
     }
     
     fseek(file, OFFSET, SEEK_SET); // Возвращаем искаженное magicnum обратно в файл
